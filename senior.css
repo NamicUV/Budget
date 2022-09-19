@@ -1,2 +1,33 @@
 /* CSS Document */
+.navbar{
+	margin: 0px;
+	background-color: gold;
+	overflow: hidden;
+}
 
+.nav{
+	float: left;
+	color: black;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	font-size: 17px;
+	margin: 0px;
+}
+
+.navbar-right {
+	float: right;
+	color: black;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	font-size: 17px;
+	margin: 0px;
+}
+
+.nav:hover {
+  background-color: lawngreen;
+}
+.navbar-right:hover {
+  background-color: lawngreen;
+}
