@@ -1,0 +1,57 @@
+/* CSS Document Section 1 */
+.s1{
+	background-color: grey;
+}
+
+.content {
+	float: left;
+	height:350px;
+	width: 50%;
+}
+
+.img {
+	float: right;
+	margin: 0px;
+	height: 350px;
+	width: 50%;
+}
+
+.space{
+	opacity: 0;
+}
+
+/*Section 2*/
+.s2{
+	display: flex;
+    align-items: center;
+    justify-content: center;
+	background-color: aqua;
+}
+
+.txt{
+	 font-size: 20px;
+     padding-left: 20px;
+}
+
+.img2{
+	flex-basis: 40%;
+	float: left;
+}
+
+/*Section 3*/
+.s3{
+	display: flex;
+    align-items: center;
+    justify-content: center;
+	background-color: grey;
+}
+
+.txt2{
+	font-size: 20px;
+     padding-left: 20px;
+}
+
+.img3{
+	flex-basis: 40%;
+	float: right;
+}
