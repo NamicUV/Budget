@@ -1,7 +1,84 @@
 /* CSS Document */
+body{
+	background-color: darkseagreen;
+}
+
+.info{
+	font-size: 25px;
+	border: solid;
+	border-radius: 25px;
+	padding: 25px;
+	background-color: white;
+}
+.h1{
+	font-size: 35px;
+	text-align: left;
+	color: black;
+}
+
+.h2{
+	font-size: 35px;
+	text-align: right;
+}
+
+.h3{
+	font-size: 35px;
+	text-align: left;
+	color: black;
+}
+
 .title{
 	text-align: center;
 	padding: 15px;
 	font-size: 50px; 
 	border: solid;
+	background-color: green;
 }
+
+.step{
+	text-align: center;
+	text-decoration: underline;
+	font-size: 35px;
+}
+
+.steps{
+	border: thin;
+	border-radius: 25px;
+	background-color: white;
+	padding-top: 10px;
+}
+
+.steps h2{
+	text-align: center;
+	border: solid;
+	border-radius: 25px;
+	background-color: sandybrown;
+}
+
+.steps p{
+	text-align: center;
+	font-size: 20px;
+}
+.steps img{
+	height: 80px;
+	widgth: 80px;
+	
+}
+
+.steps:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.box {
+	float: left;
+  	width: 33.33%;
+}
+
+.box img{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
