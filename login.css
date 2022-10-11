@@ -1,0 +1,15 @@
+
+
+.wrapper{ 
+	width: 360px; padding: 50px; 
+	margin-right: auto;
+	margin-left: auto;
+	border: solid;
+	border-color: ghostwhite;
+	border-radius: 25px;
+}
+
+.next{
+	text-align: right;
+}
+

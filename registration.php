@@ -3,8 +3,8 @@
 require_once "server.php";
  
 // Define variables and initialize with empty values
-$username = $password = $confirm_password = "";
-$username_err = $password_err = $confirm_password_err = "";
+$username = $password = $confirm_password = $plan = "";
+$username_err = $password_err = $confirm_password_err = $plan_err = "";
  
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -46,7 +46,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
     // Validate password
     if(empty(trim($_POST["password"]))){
-        $password_err = "Please enter a password.";     
+        $password_err = "Please enter a password";     
     } elseif(strlen(trim($_POST["password"])) < 6){
         $password_err = "Password must have atleast 6 characters.";
     } else{
@@ -55,27 +55,36 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
     // Validate confirm password
     if(empty(trim($_POST["confirm_password"]))){
-        $confirm_password_err = "Please confirm password.";     
+        $confirm_password_err = "Please confirm password";     
     } else{
         $confirm_password = trim($_POST["confirm_password"]);
         if(empty($password_err) && ($password != $confirm_password)){
             $confirm_password_err = "Password did not match.";
         }
     }
-    
+	
+   	// Validate plan 
+   	if($_POST['flexRadioDefault'] == -1)
+    	$plan_err = "Please Select a Plan";
+      else {
+     	$plan = trim($_POST["plan"]);
+  	}
+
+	
     // Check input errors before inserting in database
-    if(empty($username_err) && empty($password_err) && empty($confirm_password_err)){
+    if(empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($plan_err)){
         
         // Prepare an insert statement
-        $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        $sql = "INSERT INTO users (username, password, plan) VALUES (?, ?, ?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ss", $param_username, $param_password);
+            mysqli_stmt_bind_param($stmt, "sss", $param_username, $param_password, $param_plan);
             
             // Set parameters
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
+			$param_plan = $plan;
             
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
@@ -95,18 +104,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 }
 ?>
  
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Sign Up</title>
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body{ font: 14px sans-serif; }
-        .wrapper{ width: 360px; padding: 20px; }
-    </style>
-</head>
-<body>
+	<link rel="stylesheet" href="login.css">
+	<script src="senior.js"></script>
+ 	<?
+		$pageTitle = "Registration";//change for each page
+		include_once("Head.php");
+	?>
+<br><br>
     <div class="wrapper">
         <h2>Sign Up</h2>
         <p>Please fill this form to create an account.</p>
@@ -126,7 +132,27 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>">
                 <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
             </div>
-            <div class="form-group">
+				<p>Select a plan:</p>
+				<p class="note">(Note*: the order from left to right is Needs-Savings-Wants)</p>   
+			<div class="form-check">
+  				<input class="form-check-input <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" type="radio" name="plan" id="flexRadioDefault1" checked value="-1">
+  				<label class="form-check-label" for="flexRadioDefault1">Select a Plan</label>
+			</div>
+			<div class="form-group">
+			<div class="form-check">
+  				<input class="form-check-input" type="radio" name="plan" id="flexRadioDefault2" value="1">
+  				<label class="form-check-label" for="flexRadioDefault2">50%-20%-30%</label>
+			</div>
+			<div class="form-check">
+  				<input class="form-check-input" type="radio" name="plan" id="flexRadioDefault2" value="2">
+  				<label class="form-check-label" for="flexRadioDefault2">50%-40%-10%</label>
+			</div>
+			<div class="form-check">
+  				<input class="form-check-input" type="radio" name="plan" id="flexRadioDefault2" value="3">
+  				<label class="form-check-label" for="flexRadioDefault2">70%-20%-10%</label>
+			</div>
+			</div>	
+			<div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Submit">
                 <input type="reset" class="btn btn-secondary ml-2" value="Reset">
             </div>
