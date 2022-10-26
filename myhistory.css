@@ -1,0 +1,11 @@
+/* CSS Document */
+.logout{
+	text-align: right;
+}
+
+.history{
+	text-align: center;
+	border: solid;
+   
+	font-size: 50px;
+}

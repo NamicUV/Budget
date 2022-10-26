@@ -1,0 +1,63 @@
+.hello{
+	text-align: left;
+}
+
+.logout{
+	text-align: right;
+	padding: 15px;
+}
+
+/* Create two unequal columns that floats next to each other */
+.column {
+  	float: left;
+  	padding: 10px;
+  	height: 300px; 
+}
+
+.left {
+ 	width: 25%;
+	border: solid;
+}
+
+.right {
+  	width: 75%;
+	overflow-y: auto;
+}
+
+
+/* Clear floats after the columns */
+.row1:after {
+  	content: "";
+  	display: table;
+  	clear: both;
+}
+
+.month{
+	text-align: center;
+	border-bottom: solid;
+}
+
+.my1:hover{
+	border: solid;
+}
+
+.my1{
+	font-size: 25px;
+	border-bottom: solid;
+	margin-right: 50%;
+	color: black;
+}
+
+.acct{
+	border-bottom: solid;
+}
+
+#table{
+	height: 200px;
+	overflow-y: auto;
+}
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+}
