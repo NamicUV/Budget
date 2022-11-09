@@ -1,15 +1,65 @@
-body{background-color: gray;}
+body{background-color: darkseagreen;}
 
-#faq{margin-right: 50%;}
+.faq{	
+	text-align: center;
+	padding: 15px;
+	font-size: 50px; 
+	border: solid;
+	background-color: green;
+}
 
-#links{text-align: center;
-margin-left: 15%;}
+.intro {
+	text-align: center;
+	padding: 15px;
+	font-size: 30px; 
+	border: solid;
+	background-color: sandybrown;
+}
+
+.Q{
+font-size: 25px;	
+}
+
+.q1{
+	border: solid;
+	border-radius: 25px;
+	padding: 10px;
+	background-color: white;
+	
+}
+
+.q2{
+	border: solid;
+	border-radius: 25px;
+	padding: 10px;
+	background-color: white;
+
+}
 
 
-#header {color: rgb(31, 223, 31);
-text-align: center;}
+.q3{
+	border: solid;
+	border-radius: 25px;
+	padding: 10px;
+	background-color: white;
+}
 
-#Q{color: rgba(199, 28, 28, 0.805);
-font: bold;}
+.contact{
+	text-align: center;
+	padding: 25px;
+	background-color: grey;
+}
 
-#A{color: aquamarine;}
+.top{
+	font-size: 25px;
+}
+
+.text{
+	font-size: 20px;
+}
+
+img{
+	margin-left: auto;
+	margin-right: auto;
+	height: 100px;
+}

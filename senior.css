@@ -1,4 +1,7 @@
 /* CSS Document */
+body{
+	background-color: darkseagreen;
+}
 .navbar{
 	margin: 0px;
 	background-color: gold;

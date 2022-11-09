@@ -47,7 +47,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 	
 }
-
 ?>
 <!doctype html>
 <html>
@@ -95,7 +94,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <div class="card-body">
       <h5 class="card-title">Income</h5>
       <p class="card-text">Let us help you by inserting your income so that we can plan how you should spend your money based on the plan you have chosen.</p>
-	  <p>Select the income button below to add your monthly income if one is not yet shown.</p>
 	  <p class="card-text">The income amount you have inserted is</p>
 		<? 	$username = $_SESSION["username"];
 			$sql= "SELECT * FROM income WHERE username = '" . $username . "'";
@@ -130,8 +128,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	?>
 </table>
       <!-- Button trigger modal -->
-	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#addincomemodal">
-		Income</button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addincomemodal">
+                        Income
+                    </button>
     </div>
   </div>
   <div class="card">
@@ -141,37 +140,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
       <p class="card-text">Needs- This contains payments made that you absolutely must pay and are things necessary for survival such as Utilities, Healthcare, Insurance, etc.</p>
 	  <p class="card-text">Savings- This contains the percentage ammount of money left over after your expenses are subtracted from your revenue. </p>
 	  <p class="card-text">Wants- This contains payments made that better your life but that you can do without such as Hobbies, Vacations, Dining Out, etc.</p>
-	  <p class="card-text">According to your plan, you chose to distribute you income as follows</p>
-	  		<? 	$username = $_SESSION["username"];
-			$sql= "SELECT * FROM users WHERE username = '" . $username . "'";
-			$query_run = mysqli_query($link, $sql);
-		?>
-			<table id="table" class="table table-dark">
-				<thead>
-					<tr>
-						<th scope="col">Needs</th>
-						<th scope="col">Savings</th>
-						<th scope="col">Wants</th>
-					</tr>
-				</thead>
-	<?php
-		if($query_run){
-		foreach($query_run as $row){
-	?>
-				<tbody>
-					<tr>
-						<td><?php echo $row['needs']; ?></td>
-						<td><?php echo $row['savings']; ?></td>
-						<td><?php echo $row['wants']; ?></td>
-					</tr>
-					</tbody>
-	<?php
-		}
-		} else{
-		echo "No Record Found";
-		}
-	?>
-</table>
+	  <p class="card-text">According to your plan, you chose to distribute you income in a ##-##-## split</p>
       <a href="myplan.php" class="btn btn-success" role="button">Change Plan</a>
     </div>
   </div>

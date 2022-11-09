@@ -3,8 +3,12 @@
 session_start();
  
 // Check if the user is already logged in, if yes then redirect him to welcome page
-if(isset($_SESSION["logged"]) && $_SESSION["logged"] === true){
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+    header("location: index.php");
+} elseif(isset($_SESSION["logged"]) && $_SESSION["logged"] === true){
 	header("location: index2.php");
+} elseif(isset($_SESSION["logged3"]) && $_SESSION["logged3"] === true){
+	header("location: index3.php");
 	exit;
 }
 
@@ -35,7 +39,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
         // Prepare a select statement
-        $sql = "SELECT id, username, password, needs, savings, wants FROM users WHERE username = ?";
+        $sql = "SELECT id, username, password, plan FROM users WHERE username = ?";
         
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
@@ -52,17 +56,36 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 // Check if username exists, if yes then verify password
                 if(mysqli_stmt_num_rows($stmt) == 1){                    
                     // Bind result variables
-                    mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password, $needs, $savings, $wants);
+                    mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password, $plan);
                     if(mysqli_stmt_fetch($stmt)){
-                        if(password_verify($password, $hashed_password)){
+                        if(password_verify($password, $hashed_password) && $plan == "1"){
                             // Password is correct and plan=1 so start a new sesstion
 							session_start();
-
+                        
+							$_SESSION["loggedin"] = true;
+                            $_SESSION["id"] = $id;
+                            $_SESSION["username"] = $username;
+							
+							// Redirect user to welcome page
+							header("location: index.php");
+							   
+						   } elseif(password_verify($password, $hashed_password) && $plan == "2"){
+							session_start();
+							// Password is correct and plan=2 so start a new sesstion
 							$_SESSION["logged"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;
- 							// Redirect user to welcome page
+							// Redirect user to welcome page
                         	header("location: index2.php");
+							
+						   } elseif(password_verify($password, $hashed_password) && $plan == "3"){
+							session_start();
+							// Password is correct and plan=3 so start a new sesstion
+							$_SESSION["logged3"] = true;
+                            $_SESSION["id"] = $id;
+                            $_SESSION["username"] = $username;
+							// Redirect user to welcome page
+                        	header("location: index3.php");
 							
 						   }else{
 							echo "Oops something went wrong";
