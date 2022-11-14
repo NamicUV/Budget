@@ -18,3 +18,4 @@ If you will be using a local host a common code that you can use to link your we
   }
   echo "Connected successfully";
 ?>--
+2
