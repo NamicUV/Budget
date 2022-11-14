@@ -33,4 +33,5 @@ If you will be using a local host you should switch the code provided in server.
   echo "Connected successfully";
 
 ?>*
+After you creating and adjusting the information on the server.php file you can just download the rest of the files into your application that allows the use of HTML, CSS, JavaScript and PHP code. Once all the files are copied to your application the code should work once it is run or put into the programming application.
 
