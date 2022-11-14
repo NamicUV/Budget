@@ -5,11 +5,11 @@
 	margin-right: auto;
 	margin-left: auto;
 	border: solid;
-	border-color: ghostwhite;
+	border-color: black;
 	border-radius: 25px;
+	background-color: sandybrown;
 }
 
 .next{
 	text-align: right;
 }
-
