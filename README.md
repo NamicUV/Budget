@@ -1,1 +1,2 @@
 # SeniorProject
+How to run:
