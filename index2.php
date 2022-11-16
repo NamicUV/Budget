@@ -13,29 +13,24 @@ require_once "server.php";
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 	if(isset($_POST['insertdata'])){
-	$sql = "INSERT INTO list (username, buy, pay, type) VALUES (?, ?, ?, ?)";
-	$stmt = mysqli_prepare($link, $sql);
-	}
+	$username=($_SESSION["username"]);
+	$buy = $_POST['buy'];
+    $pay = $_POST['pay'];
+    $type = $_POST['type'];	
+		
+	$sql = "INSERT INTO list (username, buy, pay, type) VALUES ('$username', '$buy', '$pay', '$type')";
+	$query_run = mysqli_query($link, $sql);
 	
-	if($stmt = mysqli_prepare($link, $sql)){
-		// Bind variables to the prepared statement as parameters
-		mysqli_stmt_bind_param($stmt, "ssss", $param_username, $param_buy, $param_pay, $param_type);
+	        if($query_run)
+        {
+            echo '<script> alert("Data Inserted"); </script>';
+            header("Location:index2.php");
+        }
+        else
+        {
+            echo '<script> alert("Data Not Updated"); </script>';
+        }}
 
-		// Set parameters
-		$param_username = ($_SESSION["username"]);
-		$param_buy = $_POST['buy'];
-		$param_pay = $_POST['pay'];
-		$param_type = $_POST['type'];
-
-			if(mysqli_stmt_execute($stmt)){
-				// Redirect to login page
-				header("location: login.php");
-			} else{
-				echo "Oops! Something went wrong. Please try again later.";
-			}
-		// Close statement
-		mysqli_stmt_close($stmt);
-	} 
 
 	    if(isset($_POST['updatebudget']))
     {    
@@ -138,7 +133,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	<p class="logout">
         <a href="logout.php" class="btn btn-danger ml-3">Sign Out of Your Account</a>
     </p>
-    	<h1 class="hello">Hello, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Here is your budget.</h1>
+	    <p><a href="resetpassword.php" class="btn btn-warning">Reset Your Password</a>
+	</p>
+	
+    	<h1 class="hello">Welcome, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Here is your budget.</h1>
     		<div class="row1">
   				<div class="column left" style="background-color:#aaa;">
     				<h2 class="acct">Budget</h2>
@@ -291,5 +289,157 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 </table>
   		</div>
 	</div>
+	
+	<div class="card">
+		<div class="card-body">
+	<!--Fetches calculations based on account income and user needs percentage-->
+	<?php 
+		$username= $_SESSION['username'];
+		$percent= 60;
+		$sql= "SELECT users.username, users.needs, income.income, ROUND((needs/100)*income,2) AS user_needs 
+		FROM users, income WHERE users.username = income.username AND users.username = '" . $username . "'";
+		$query_run= mysqli_query($link, $sql);
+			if($query_run){
+			foreach($query_run as $row){
+			$user_needs= $row['user_needs'];
+			$user_needs2= ($percent / 100) * $user_needs;
+			}}
+	?>
+	<?php
+		$username= $_SESSION['username'];
+		$sql= "SELECT list.type, list.pay, income.income, ROUND(SUM(pay),2) as sum_needs FROM list, income
+		WHERE list.username = income.username AND list.username= '".$username."'  AND list.type='needs'";
+		$query_run= mysqli_query($link, $sql);
+			if($query_run){
+				foreach($query_run as $row){
+				$sum_needs= $row['sum_needs'];
+				}}
+			if($sum_needs < $user_needs2){
+				echo '<i style="color:green;font-size:30px;">Needs: Limit not met </i>';
+				$pro="progress-bar progress-bar-striped bg-success";
+			} elseif($sum_needs > $user_needs2 && $sum_needs < $user_needs){
+				echo '<i style="color:yellow;font-size:30px;">Needs: Close to Limit </i>';
+				$pro="progress-bar progress-bar-striped bg-warning";
+			} elseif ($sum_needs > $user_needs){
+				echo '<i style="color:red;font-size:30px;">Needs: Limit Exceeded </i>';
+				$pro="progress-bar progress-bar-striped bg-danger";
+			} elseif ($sum_needs = $user_needs){
+				echo '<i style="color:green;font-size:30px;">Needs: Limit Met </i>';
+				$pro="progress-bar progress-bar-striped bg-success";
+			}
+			
+			if($sum_needs > 0){
+				echo "$sum_needs out of $user_needs";
+				$bar= ($sum_needs/$user_needs) * 100;
+				} else{
+					echo 'More information needed. Please click "My Account" to add information';
+				}
+	?>
+	<div class="progress" style="height: 30px;">
+  		<div class="<?php echo $pro;?>" role="progressbar" style="width: <?php echo $bar;?>%" aria-valuenow=<?php echo $sum_needs ?> aria-valuemin="0" aria-valuemax=<?php echo $user_needs ?>><?php echo $sum_needs; ?></div>
+			</div></div>
+		
+		<div class="card-body">
+	<!--Fetches calculations based on account income and user savings percentage-->
+	<?php 
+		$username= $_SESSION['username'];
+		$percent= 60;
+		$sql= "SELECT users.username, users.savings, income.income, ROUND((savings/100)*income,2) AS user_savings 
+		FROM users, income WHERE users.username = income.username AND users.username = '" . $username . "'";
+		$query_run= mysqli_query($link, $sql);
+		if($query_run){
+		foreach($query_run as $row){
+		$user_savings= $row['user_savings'];
+		$user_savings2= ($percent / 100) * $user_savings;
+		}}
+	?>
+	<?php
+		$username= $_SESSION['username'];
+		$sql= "SELECT list.type, list.pay, income.income, ROUND(SUM(pay),2) as sum_savings FROM list, income
+		WHERE list.username = income.username AND list.username= '".$username."'  AND list.type='savings'";
+		$query_run= mysqli_query($link, $sql);
+			if($query_run){
+			foreach($query_run as $row){
+			$sum_savings= $row['sum_savings'];
+				if($sum_savings < $user_savings2){
+					echo '<i style="color:green;font-size:30px;">Savings: Limit not Met </i>';
+					$pro2="progress-bar progress-bar-striped bg-success";
+				} elseif ($sum_savings > $user_savings){
+					echo '<i style="color:red;font-size:30px;">Savings: Limit Exceeded </i>';
+					$pro2="progress-bar progress-bar-striped bg-danger";
+				} elseif ($sum_savings = $user_savings){
+					echo '<i style="color:green;font-size:30px;">Savings: Limit Met </i>';
+					$pro2="progress-bar progress-bar-striped bg-success";
+				} elseif ($sum_savings > $user_savings2 && $sum_savings < $user_savings){
+					echo '<i style="color:yellow;font-size:30px;">Savings: Close to Limit </i>';
+					$pro2="progress-bar progress-bar-striped bg-warning";
+				}
+			}}
+			
+			if($sum_savings > 0){
+				echo "$sum_savings out of $user_savings";
+				$bar2= ($sum_savings/$user_savings) * 100;
+				} else{
+					echo 'More information needed. Please click "My Account" to add information';
+				}
+	?>
+	
+	<div class="progress" style="height: 30px;">
+  		<div class="<?php echo $pro2;?>" role="progressbar" style="width: <?php echo $bar2;?>%" aria-valuenow=<?php echo $sum_savings ?> aria-valuemin="0" aria-valuemax=<?php echo $user_savings ?>><?php echo $sum_savings; ?></div>
+			</div></div>
+	
+	<div class="card-body">	
+	<!--Fetches calculations based on account income and user wants percentage-->
+	<?php 
+		$username= $_SESSION['username'];
+		$percent= 60;
+		$sql= "SELECT users.username, users.wants, income.income, ROUND((wants/100)*income,2) AS user_wants 
+		FROM users, income WHERE users.username = income.username AND users.username = '" . $username . "'";
+		$query_run= mysqli_query($link, $sql);
+		if($query_run){
+		foreach($query_run as $row){
+		$user_wants= $row['user_wants'];
+		$user_wants2= ($percent / 100) * $user_wants;
+		}}
+	?>
+	<?php
+		$username= $_SESSION['username'];
+		$sql= "SELECT list.type, list.pay, income.income, ROUND(SUM(pay),2) as sum_wants FROM list, income
+		WHERE list.username = income.username AND list.username= '".$username."'  AND list.type='wants'";
+		$query_run= mysqli_query($link, $sql);
+		if($query_run){
+		foreach($query_run as $row){
+		$sum_wants= $row['sum_wants'];
+			if($sum_wants < $user_wants2){
+				echo '<i style="color:green;font-size:30px;">Wants: Limit not met </i>';
+				$pro3="progress-bar progress-bar-striped bg-success";
+			} elseif($sum_wants > $user_wants2 && $sum_wants < $user_wants){
+				echo '<i style="color:yellow;font-size:30px;">Wants: Close to Limit </i>';
+				$pro3="progress-bar progress-bar-striped bg-warning";
+			} elseif ($sum_wants > $user_wants){
+				echo '<i style="color:red;font-size:30px;">Wants: Limit Exceeded </i>';
+				$pro3="progress-bar progress-bar-striped bg-danger";
+			} elseif ($sum_wants = $user_wants){
+				echo '<i style="color:green;font-size:30px;">Wants: Limit Met </i>';
+				$pro3="progress-bar progress-bar-striped bg-success";
+			} 
+		}}
+		
+		if($sum_wants > 0){
+			echo "$sum_wants out of $user_wants";
+			$bar3= ($sum_wants/$user_wants) * 100;
+			} else{
+				echo 'More information needed. Please click "My Account" to add information';
+			}
+	?>
+	
+	<div class="progress" style="height: 30px;">
+  		<div class="<?php echo $pro3;?>" role="progressbar" style="width: <?php echo $bar3;?>%" aria-valuenow=<?php echo $sum_wants ?> aria-valuemin="0" aria-valuemax=<?php echo $user_wants ?>><?php echo $sum_wants; ?></div>
+	</div>
+	</div>
+	
+	<div class="card-body">
+		<h3 class="text-center">You Are Doing Great! Keep Going!</h3>
+	</div></div>
 </body>
 </html>

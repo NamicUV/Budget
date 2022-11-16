@@ -5,28 +5,22 @@ require_once "server.php";
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 	if(isset($_POST['insertdata'])){
-	$sql = "INSERT INTO income (username, income) VALUES (?, ?)";
-	$stmt = mysqli_prepare($link, $sql);
-	}
+	$username=($_SESSION["username"]);
+	$income = $_POST['income'];
+		
+	$sql = "INSERT INTO income (username, income) VALUES ('$username', '$income')";
+	$query_run = mysqli_query($link, $sql);
 	
-	if($stmt = mysqli_prepare($link, $sql)){
-		// Bind variables to the prepared statement as parameters
-		mysqli_stmt_bind_param($stmt, "ss", $param_username, $param_income);
+	        if($query_run)
+        {
+            echo '<script> alert("Income Updated"); </script>';
+            header("Location:myacct.php");
+        }
+        else
+        {
+            echo '<script> alert("Data Not Updated"); </script>';
+        }}
 
-		// Set parameters
-		$param_username = ($_SESSION["username"]);
-		$param_income = $_POST['income'];
-
-			if(mysqli_stmt_execute($stmt)){
-				// Redirect to login page
-				echo '<script> alert("Income Updated"); </script>';
-				header("location: myacct.php");
-			} else{
-				echo "Oops! Something went wrong. Please try again later.";
-			}
-		// Close statement
-		mysqli_stmt_close($stmt);
-	} 
 	if(isset($_POST['updatebudget'])){    
         $ide = $_POST['update_id'];
         $username = ($_SESSION["username"]);
@@ -47,6 +41,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 	
 }
+
 ?>
 <!doctype html>
 <html>
@@ -92,8 +87,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   <div class="card">
     <img src="https://cdn-icons-png.flaticon.com/512/3135/3135706.png" class="card-img-top" alt="income">
     <div class="card-body">
-      <h5 class="card-title">Income</h5>
-      <p class="card-text">Let us help you by inserting your income so that we can plan how you should spend your money based on the plan you have chosen.</p>
+      <h4 class="card-title">Income</h4>
+      <p class="card-text">Let us help you by inserting your monthly income so that we can plan how you should spend your money based on the plan you have chosen.</p>
+	  <p>Select the income button below to add your monthly income if one is not yet shown.</p>
 	  <p class="card-text">The income amount you have inserted is</p>
 		<? 	$username = $_SESSION["username"];
 			$sql= "SELECT * FROM income WHERE username = '" . $username . "'";
@@ -127,35 +123,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		}
 	?>
 </table>
-      <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addincomemodal">
-                        Income
-                    </button>
+      <br><br><br><br><br>
+		<!-- Button trigger modal -->
+	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#addincomemodal">
+		Income</button>
     </div>
   </div>
-  <div class="card">
-    <img src="https://icons.veryicon.com/png/o/education-technology/management-icon/plan-28.png" class="card-img-top" alt="plan">
-    <div class="card-body">
-      <h5 class="card-title">Selected Plan</h5>
-      <p class="card-text">Needs- This contains payments made that you absolutely must pay and are things necessary for survival such as Utilities, Healthcare, Insurance, etc.</p>
-	  <p class="card-text">Savings- This contains the percentage ammount of money left over after your expenses are subtracted from your revenue. </p>
-	  <p class="card-text">Wants- This contains payments made that better your life but that you can do without such as Hobbies, Vacations, Dining Out, etc.</p>
-	  <p class="card-text">According to your plan, you chose to distribute you income in a ##-##-## split</p>
-      <a href="myplan.php" class="btn btn-success" role="button">Change Plan</a>
-    </div>
-  </div>
-  <div class="card">
-    <img src="https://www.shareicon.net/data/2016/10/11/842409_interface_512x512.png" class="card-img-top" alt="progress">
-    <div class="card-body">
-      <h5 class="card-title">Progress</h5>
-      <p class="card-text">We are here to help you every step of the way and in doing so we have created a way for you to check your progress based on the plan you have chosen for yourself </p>
-      <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
-		  <a href="index2.php" class="btn btn-success" role="button">Check Progress</a>
-    </div>
-  </div>
-</div>
-	
-
 	<!--Modal-->
     <div class="modal fade" id="addincomemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -211,6 +184,167 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 				</div>
 			</div>
 		</div>
+		
+		
+  <div class="card">
+    <img src="https://icons.veryicon.com/png/o/education-technology/management-icon/plan-28.png" class="card-img-top" alt="plan">
+    <div class="card-body">
+      <h4 class="card-title">Selected Plan</h4>
+      <p class="card-text">Needs- This contains payments made that you absolutely must pay and are things necessary for survival such as Utilities, Healthcare, Insurance, etc.</p>
+	  <p class="card-text">Savings- This contains the percentage ammount of money left over after your expenses are subtracted from your revenue. </p>
+	  <p class="card-text">Wants- This contains payments made that better your life but that you can do without such as Hobbies, Vacations, Dining Out, etc.</p>
+	  <p class="card-text">According to your plan, you chose to distribute you income as follows</p>
+	  		<? 	$username = $_SESSION["username"];
+			$sql= "SELECT * FROM users WHERE username = '" . $username . "'";
+			$query_run = mysqli_query($link, $sql);
+		?>
+			<table id="table" class="table table-dark">
+				<thead>
+					<tr>
+						<th scope="col">Needs</th>
+						<th scope="col">Savings</th>
+						<th scope="col">Wants</th>
+					</tr>
+				</thead>
+	<?php
+		if($query_run){
+		foreach($query_run as $row){
+	?>
+				<tbody>
+					<tr>
+						<td><?php echo $row['needs']; ?></td>
+						<td><?php echo $row['savings']; ?></td>
+						<td><?php echo $row['wants']; ?></td>
+					</tr>
+					</tbody>
+	<?php
+		}
+		} else{
+		echo "No Record Found";
+		}
+	?>
+</table>
+      <a href="myplan.php" class="btn btn-success" role="button">Change Plan</a>
+    </div>
+	  </div>
+  	<div class="card">
+		<img src="https://www.shareicon.net/data/2016/10/11/842409_interface_512x512.png" class="card-img-top" alt="progress">
+		<div class="card-body">
+	  	<h4 class="card-title">Progress</h4>
+	  	<p class="card-text">We are here to help you every step of the way and in doing so we have created a way for you to check your progress based on the plan you have chosen for yourself </p>
+		<h5>Needs (The max you should be spending on needs):
+			<?php 
+				$username= $_SESSION['username'];
+				$percent= 60;
+				$sql= "SELECT users.username, users.needs, income.income, ROUND((needs/100)*income,2) AS user_needs 
+				FROM users, income WHERE users.username = income.username AND users.username = '" . $username . "'";
+				$query_run= mysqli_query($link, $sql);
+					if($query_run){
+					foreach($query_run as $row){
+					echo $row['user_needs']; 
+					$user_needs= $row['user_needs'];
+					$user_needs2= ($percent / 100) * $user_needs;
+					}}
+			?> </h5>
+			<h6>Current Status:
+			<?php
+				$username= $_SESSION['username'];
+				$sql= "SELECT list.type, list.pay, income.income, ROUND(SUM(pay),2) as sum_needs FROM list, income
+				WHERE list.username = income.username AND list.username= '".$username."'  AND list.type='needs'";
+				$query_run= mysqli_query($link, $sql);
+					if($query_run){
+						foreach($query_run as $row){
+						$sum_needs= $row['sum_needs'];
+						}}
+			 		if($sum_needs < $user_needs2){
+						echo '<i style="color:green;font-size:30px;"> Limit not met </i>';
+					} elseif($sum_needs > $user_needs2 && $sum_needs < $user_needs){
+						echo '<i style="color:yellow;font-size:30px;"> Close to Limit </i>';
+					} elseif ($sum_needs > $user_needs){
+						echo '<i style="color:red;font-size:30px;"> Limit Exceeded </i>';
+					} elseif ($sum_needs = $user_needs){
+						echo '<i style="color:green;font-size:30px;"> Limit Met </i>';
+					}
+				?> </h6>
+		<h5>Savings (The max you should be spending on savings):
+			<?php 
+				$username= $_SESSION['username'];
+				$percent= 60;
+				$sql= "SELECT users.username, users.savings, income.income, ROUND((savings/100)*income,2) AS user_savings 
+				FROM users, income WHERE users.username = income.username AND users.username = '" . $username . "'";
+				$query_run= mysqli_query($link, $sql);
+				if($query_run){
+				foreach($query_run as $row){
+				echo $row['user_savings']; 
+				$user_savings= $row['user_savings'];
+				$user_savings2= ($percent / 100) * $user_savings;
+				}}
+			?> </h5>
+			<h6>Current Status:
+				<?php
+				$username= $_SESSION['username'];
+				$sql= "SELECT list.type, list.pay, income.income, ROUND(SUM(pay),2) as sum_savings FROM list, income
+				WHERE list.username = income.username AND list.username= '".$username."'  AND list.type='savings'";
+				$query_run= mysqli_query($link, $sql);
+					if($query_run){
+					foreach($query_run as $row){
+					echo $row['sum_savings'];
+					$sum_savings= $row['sum_savings'];
+						if($sum_savings < $user_savings2){
+							echo '<i style="color:green;font-size:30px;"> Limit not Met </i>';
+						} elseif ($sum_savings > $user_savings){
+							echo '<i style="color:red;font-size:30px;"> Limit Exceeded </i>';
+						} elseif ($sum_savings = $user_savings){
+							echo '<i style="color:green;font-size:30px;"> Limit Met </i>';
+						} elseif ($sum_savings > $user_savings2 && $sum_savings < $user_savings){
+							echo '<i style="color:yellow;font-size:30px;"> Close to Limit </i>';
+						}
+					}}
+				?></h6>
+		<h5>Wants (The max you should be spending on wants):
+			<?php 
+				$username= $_SESSION['username'];
+				$percent= 60;
+				$sql= "SELECT users.username, users.wants, income.income, ROUND((wants/100)*income,2) AS user_wants 
+				FROM users, income WHERE users.username = income.username AND users.username = '" . $username . "'";
+				$query_run= mysqli_query($link, $sql);
+				if($query_run){
+				foreach($query_run as $row){
+				echo $row['user_wants']; 
+				$user_wants= $row['user_wants'];
+				$user_wants2= ($percent / 100) * $user_wants;
+				}}
+			?></h5>
+			<h6>Current Status:
+			<?php
+				$username= $_SESSION['username'];
+				$sql= "SELECT list.type, list.pay, income.income, ROUND(SUM(pay),2) as sum_wants FROM list, income
+				WHERE list.username = income.username AND list.username= '".$username."'  AND list.type='wants'";
+				$query_run= mysqli_query($link, $sql);
+				if($query_run){
+				foreach($query_run as $row){
+				$sum_wants= $row['sum_wants'];
+					if($sum_wants < $user_wants2){
+						echo '<i style="color:green;font-size:30px;"> Limit not met </i>';
+					} elseif($sum_wants > $user_wants2 && $sum_wants < $user_wants){
+						echo '<i style="color:yellow;font-size:30px;"> Close to Limit </i>';
+					} elseif ($sum_wants > $user_wants){
+						echo '<i style="color:red;font-size:30px;"> Limit Exceeded </i>';
+					} elseif ($sum_wants = $user_wants){
+						echo '<i style="color:green;font-size:30px;"> Limit Met </i>';
+					}
+				}}
+				?></h6>
+			<br><br>
+
+	  	<button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
+		  	<a href="index2.php" class="btn btn-success" role="button">Check Progress</a>
+		</div>
+	  </div>
+</div>
+	
+
+
 		
 </body>
 </html>
