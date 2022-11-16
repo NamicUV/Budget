@@ -38,4 +38,31 @@ mysqli_close($link);
 
 ?>*
 
-Once you have successfully connected your database to your webage feel free to comment out the echo line in the server.php file so that it will not appear on your webpage. Next, make sure you are using a coding application that allows the use of HTML, CSS, JavaScript and PHP code. Next you should download the code from the repository and add all of the files from the repository to your coding application. Make sure that all files are under the same folder and once that is done the code should be ready to use. Run/Put the code into your webpage space and this should be everything that needs to be done in order to use the project. If you have your own domain just enter the website domain into your browser url to see the project but if you are using a local host you will need to enter the local host url into your browser url to see the project.
+Once you have successfully connected your database to your webage feel free to comment out the echo line in the server.php file so that it will not appear on your webpage. Once your connection is established enter the following queries into your database:
+
+CREATE TABLE users (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    needs VARCHAR(4) NOT NULL,
+    savings VARCHAR(4) NOT NULL,
+    wants VARCHAR(4) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE list (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL,
+    buy VARCHAR(50) NOT NULL,
+    pay DOUBLE NOT NULL,
+    type VARCHAR(50) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE income (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    income DOUBLE NOT NULL
+);
+
+Next, make sure you are using a coding application that allows the use of HTML, CSS, JavaScript and PHP code. Next you should download the code from the repository and add all of the files from the repository to your coding application. Make sure that all files are under the same folder and once that is done the code should be ready to use. Run/Put the code into your webpage space and this should be everything that needs to be done in order to use the project. If you have your own domain just enter the website domain into your browser url to see the project but if you are using a local host you will need to enter the local host url into your browser url to see the project.
