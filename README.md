@@ -65,4 +65,8 @@ CREATE TABLE income (
     income DOUBLE NOT NULL
 );
 
-Next, make sure you are using a coding application that allows the use of HTML, CSS, JavaScript and PHP code. Next you should download the code from the repository and add all of the files from the repository to your coding application. Make sure that all files are under the same folder and once that is done the code should be ready to use. Run/Put the code into your webpage space and this should be everything that needs to be done in order to use the project. If you have your own domain just enter the website domain into your browser url to see the project but if you are using a local host you will need to enter the local host url into your browser url to see the project.
+Next, make sure you are using a coding application that allows the use of HTML, CSS, JavaScript and PHP code. Next you should download the code from the repository and add all of the files from the repository to your coding application. Make sure that all files are under the same folder and once that is done the code should be ready to use. Run/Put the code into your webpage space and this should be everything that needs to be done in order to use the project. 
+
+*Please Note*: If you are using a service provider for your domain and database you will need to use the index.html file do establish the homepage of your domain. If you are using a local host then the index.html will not be used.
+
+If you have your own domain just enter the website domain into your browser url to see the project but if you are using a local host you will need to enter the local host url into your browser url to see the project.
