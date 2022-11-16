@@ -38,5 +38,5 @@ mysqli_close($link);
 
 ?>*
 
-After you creating and adjusting the information on the server.php file you can just download the rest of the files into your application that allows the use of HTML, CSS, JavaScript and PHP code. Once all the files are copied to your application the code should work once it is run or put into the programming application.
+Once you have successfully connected your database to your webage feel free to comment out the echo line in the server.php file so that it will not appear on your webpage. Next, make sure you are using a coding application that allows the use of HTML, CSS, JavaScript and PHP code. Next you should ----- Once all the files are copied to your application the code should work once it is run or put into the programming application.
 
