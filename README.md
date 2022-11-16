@@ -1,6 +1,7 @@
 # SeniorProject
 Discription:
-Our project is a simple budget management web site that will allow users to log there spending. Our website will allow the user to input there monthly income and by doing this it will help track the user to make sure that they are not spending more than they are making. There are also features that allow the user to set how much they need for bills, how much they want to save, and how much money they will have for just spending for fun. The plan they have setup pulse their income will then be represent in these graphs that will show the user how much they are spending in each category and prompt them if they’re spending too much in one area.
+
+Our project consists of a simple budget management web site that will help users develop better spending habits. Users are able to log there spending and also have the ability to edit and delete any logs as they see fit. Once they insert their monthly income, calculations will be automatically made and they will see how they should divide their income based on their selected plan. The information will be presented as a bar graph which shows the user thier progress and where they stand in their plan.
 
 How to run:
 First you will need to set up either a remote or local database and insert the information corresponding to the database into the server.php file.
