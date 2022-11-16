@@ -1,5 +1,5 @@
 # SeniorProject
-Discription:
+Description:
 
 Our project consists of a simple budget management web site that will help users develop better spending habits. Users are able to log there spending and also have the ability to edit and delete any logs as they see fit. Once they insert their monthly income, calculations will be automatically made and shown allowing users to see how they should divide their income based on their selected plan. The information will be presented as a bar graph which shows the users their progress and where they standings accoring to thier plan.
 
