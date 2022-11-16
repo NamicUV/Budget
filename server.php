@@ -1,9 +1,9 @@
 
 <?php
-  $host_name = 'db5010208595.hosting-data.io';
-  $database = 'dbs8652181';
-  $user_name = 'dbu557980';
-  $password = 'bettercheddar2';
+  $host_name = 'host name';
+  $database = 'database name';
+  $user_name = 'username';
+  $password = 'password';
 
   $link = new mysqli($host_name, $user_name, $password, $database);
 
