@@ -83,9 +83,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	<a href="login.php" class="btn btn-danger ml-3">Back</a>
 	</div><br><br>
 	
-	<div class="card-group">
+	<div class="card-deck">
   <div class="card">
-    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135706.png" class="card-img-top" alt="income">
+    <img src="https://cdn-icons-png.flaticon.com/512/2037/2037015.png" alt="income">
     <div class="card-body">
       <h4 class="card-title">Income</h4>
       <p class="card-text">Let us help you by inserting your monthly income so that we can plan how you should spend your money based on the plan you have chosen.</p>
@@ -123,11 +123,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		}
 	?>
 </table>
-      <br><br><br><br><br>
-		<!-- Button trigger modal -->
-	<button type="button" class="btn btn-success" data-toggle="modal" data-target="#addincomemodal">
-		Income</button>
     </div>
+		 <!-- Button trigger modal -->
+		<div class="card-footer">
+		  <small class="d-grid gap-2 d-md-flex justify-content-md-center"><button type="button" class="btn btn-success" data-toggle="modal" data-target="#addincomemodal">
+			Income</button></small>
+		</div>
   </div>
 	<!--Modal-->
     <div class="modal fade" id="addincomemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -187,7 +188,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		
 		
   <div class="card">
-    <img src="https://icons.veryicon.com/png/o/education-technology/management-icon/plan-28.png" class="card-img-top" alt="plan">
+    <img src="https://cdn-icons-png.flaticon.com/512/2036/2036910.png"  alt="plan">
     <div class="card-body">
       <h4 class="card-title">Selected Plan</h4>
       <p class="card-text">Needs- This contains payments made that you absolutely must pay and are things necessary for survival such as Utilities, Healthcare, Insurance, etc.</p>
@@ -224,11 +225,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		}
 	?>
 </table>
-      <a href="myplan.php" class="btn btn-success" role="button">Change Plan</a>
     </div>
-	  </div>
+	  	<div class="card-footer">
+      		<small class="d-grid gap-2 d-md-flex justify-content-md-center"><a href="myplan.php" class="btn btn-success" role="button">Change Plan</a></small>
+    	</div>
+</div>
   	<div class="card">
-		<img src="https://www.shareicon.net/data/2016/10/11/842409_interface_512x512.png" class="card-img-top" alt="progress">
+		<img src="https://cdn-icons-png.flaticon.com/512/2037/2037085.png" alt="progress">
 		<div class="card-body">
 	  	<h4 class="card-title">Progress</h4>
 	  	<p class="card-text">We are here to help you every step of the way and in doing so we have created a way for you to check your progress based on the plan you have chosen for yourself </p>
@@ -288,7 +291,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 				$query_run= mysqli_query($link, $sql);
 					if($query_run){
 					foreach($query_run as $row){
-					echo $row['sum_savings'];
 					$sum_savings= $row['sum_savings'];
 						if($sum_savings < $user_savings2){
 							echo '<i style="color:green;font-size:30px;"> Limit not Met </i>';
@@ -334,12 +336,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 						echo '<i style="color:green;font-size:30px;"> Limit Met </i>';
 					}
 				}}
-				?></h6>
-			<br><br>
-
-	  	<button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
-		  	<a href="index2.php" class="btn btn-success" role="button">Check Progress</a>
+				?></h6>	  	
 		</div>
+		    <div class="card-footer">
+      			<small class="d-grid gap-2 d-md-flex justify-content-md-center"><a href="index2.php" class="btn btn-success" role="button">Check Progress</a></button></small>
+    		</div>
 	  </div>
 </div>
 	

@@ -23,7 +23,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	
 	        if($query_run)
         {
-            echo '<script> alert("Data Inserted"); </script>';
             header("Location:index2.php");
         }
         else
@@ -46,7 +45,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
         if($query_run)
         {
-            echo '<script> alert("Data Updated"); </script>';
             header("Location:index2.php");
         }
         else
@@ -82,7 +80,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <title>Welcome</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="index.css">
-	<script src="senior.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -247,8 +244,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>
         </div>
     </div>
+						
+		<!-- This table has a SQL query that retrieves all information in list table based on the current month--> 				
 	<? 	$username = $_SESSION["username"];
-		$sql= "SELECT * FROM list WHERE username = '" . $username . "'";
+		$sql= "select * from list where MONTH(created_at)=MONTH(now()) && username = '" . $username . "' ";
 		$query_run = mysqli_query($link, $sql);
 	?>
 			<table id="table" class="table table-dark">
@@ -273,10 +272,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 						<td><?php echo $row['pay']; ?></td>
 						<td><?php echo $row['type']; ?></td>
 						<td>
-							<button type="button" class="btn btn-warning editbtn">Edit</button>
+							<button type="button" class="btn btn-warning editbtn">E</button>
 						</td>
 						<td>
-							<button type="button" class="btn btn-danger deletebtn">Delete</button>
+							<button type="button" class="btn btn-danger deletebtn">D</button>
 						</td>
 					</tr>
 					</tbody>
@@ -307,8 +306,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	?>
 	<?php
 		$username= $_SESSION['username'];
-		$sql= "SELECT list.type, list.pay, income.income, ROUND(SUM(pay),2) as sum_needs FROM list, income
-		WHERE list.username = income.username AND list.username= '".$username."'  AND list.type='needs'";
+		$sql= "SELECT list.created_at, list.type, list.pay, income.income, ROUND(SUM(pay),2) as sum_needs FROM list, income
+		WHERE list.username = income.username AND list.username= '".$username."'  AND list.type='needs' AND MONTH(created_at)=MONTH(now())";
 		$query_run= mysqli_query($link, $sql);
 			if($query_run){
 				foreach($query_run as $row){
@@ -323,6 +322,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 			} elseif ($sum_needs > $user_needs){
 				echo '<i style="color:red;font-size:30px;">Needs: Limit Exceeded </i>';
 				$pro="progress-bar progress-bar-striped bg-danger";
+				echo '<script> alert("Limit Exceeded! Please Adjust Your Plan In The My Plan Tab"); </script>';
 			} elseif ($sum_needs = $user_needs){
 				echo '<i style="color:green;font-size:30px;">Needs: Limit Met </i>';
 				$pro="progress-bar progress-bar-striped bg-success";
@@ -332,7 +332,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 				echo "$sum_needs out of $user_needs";
 				$bar= ($sum_needs/$user_needs) * 100;
 				} else{
-					echo 'More information needed. Please click "My Account" to add information';
+					echo 'No Needs Data Inserted. Insert an item type needs and check "my account" to confirm that a monthly income is set.';
 				}
 	?>
 	<div class="progress" style="height: 30px;">
@@ -345,7 +345,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		$username= $_SESSION['username'];
 		$percent= 60;
 		$sql= "SELECT users.username, users.savings, income.income, ROUND((savings/100)*income,2) AS user_savings 
-		FROM users, income WHERE users.username = income.username AND users.username = '" . $username . "'";
+		FROM users, income WHERE users.username = income.username AND users.username = '" . $username . "'" ;
 		$query_run= mysqli_query($link, $sql);
 		if($query_run){
 		foreach($query_run as $row){
@@ -355,8 +355,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	?>
 	<?php
 		$username= $_SESSION['username'];
-		$sql= "SELECT list.type, list.pay, income.income, ROUND(SUM(pay),2) as sum_savings FROM list, income
-		WHERE list.username = income.username AND list.username= '".$username."'  AND list.type='savings'";
+		$sql= "SELECT list.created_at, list.type, list.pay, income.income, ROUND(SUM(pay),2) as sum_savings FROM list, income
+		WHERE list.username = income.username AND list.username= '".$username."'  AND list.type='savings' AND MONTH(created_at)=MONTH(now())";
 		$query_run= mysqli_query($link, $sql);
 			if($query_run){
 			foreach($query_run as $row){
@@ -367,6 +367,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 				} elseif ($sum_savings > $user_savings){
 					echo '<i style="color:red;font-size:30px;">Savings: Limit Exceeded </i>';
 					$pro2="progress-bar progress-bar-striped bg-danger";
+					echo '<script> alert("Limit Exceeded! Please Adjust Your Plan In The My Plan Tab"); </script>';
 				} elseif ($sum_savings = $user_savings){
 					echo '<i style="color:green;font-size:30px;">Savings: Limit Met </i>';
 					$pro2="progress-bar progress-bar-striped bg-success";
@@ -380,7 +381,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 				echo "$sum_savings out of $user_savings";
 				$bar2= ($sum_savings/$user_savings) * 100;
 				} else{
-					echo 'More information needed. Please click "My Account" to add information';
+					echo 'No Savings Data Inserted. Insert an item type savings and check "my account" to confirm that a monthly income is set.';
 				}
 	?>
 	
@@ -404,8 +405,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	?>
 	<?php
 		$username= $_SESSION['username'];
-		$sql= "SELECT list.type, list.pay, income.income, ROUND(SUM(pay),2) as sum_wants FROM list, income
-		WHERE list.username = income.username AND list.username= '".$username."'  AND list.type='wants'";
+		$sql= "SELECT list.created_at, list.type, list.pay, income.income, ROUND(SUM(pay),2) as sum_wants FROM list, income
+		WHERE list.username = income.username AND list.username= '".$username."' AND list.type='wants' AND MONTH(created_at)=MONTH(now())";
 		$query_run= mysqli_query($link, $sql);
 		if($query_run){
 		foreach($query_run as $row){
@@ -419,6 +420,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 			} elseif ($sum_wants > $user_wants){
 				echo '<i style="color:red;font-size:30px;">Wants: Limit Exceeded </i>';
 				$pro3="progress-bar progress-bar-striped bg-danger";
+				echo '<script> alert("Limit Exceeded! Please Adjust Your Plan In The My Plan Tab"); </script>';
 			} elseif ($sum_wants = $user_wants){
 				echo '<i style="color:green;font-size:30px;">Wants: Limit Met </i>';
 				$pro3="progress-bar progress-bar-striped bg-success";
@@ -429,7 +431,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 			echo "$sum_wants out of $user_wants";
 			$bar3= ($sum_wants/$user_wants) * 100;
 			} else{
-				echo 'More information needed. Please click "My Account" to add information';
+				echo 'No Wants Data Inserted. Insert an item type wants and check "my account" to confirm that a monthly income is set.';
 			}
 	?>
 	

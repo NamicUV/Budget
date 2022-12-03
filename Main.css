@@ -7,17 +7,29 @@
 
 .content {
 	float: left;
-	height:350px;
+	height:400px;
 	width: 50%;
+	object-fit: fill;
+
 }
 
 .img {
 	float: right;
 	margin: 0px;
-	height: 350px;
+	height: 400px;
 	width: 50%;
+    object-fit: fill;
+
 }
 
+@media only screen and (max-width: 600px) {
+  	.content {
+    	height:200px;
+  	}
+	.img{
+		height:200px;
+	}	
+}
 
 .space{
 	opacity: 0;
@@ -25,27 +37,18 @@
 
 /*Section 2*/
 .s2{
-/*
-	display: flex;
-    align-items: center;
-    justify-content: center;
-	background-color: aqua;
-*/
 	display: flex;
 	text-align: center;
 	align-items: center;
 	justify-content: center;
-	padding: 15px;
-	font-size: 60px; 
 	border: solid;
 	background-color: white;
+	border-radius: 25px;
 }
 
 .txt{
-	 font-size: 20px;
-     padding-left: 20px;
-
-	
+	font-size: 25px;
+	padding: 25px;	
 }
 
 .img2{
@@ -58,33 +61,26 @@
 
 /*Section 3*/
 .s3{
-/*
-	display: flex;
-    align-items: center;
-    justify-content: center;
-	background-color: grey;
-*/
 	display: flex;
 	text-align: center;
 	align-items: center;
 	justify-content: center;
-	padding: 15px;
-	font-size: 60px; 
 	border: solid;
+	border-radius: 25px;
 	background-color: white;
 }
 
 .txt2{
-	font-size: 20px;
-     padding-left: 20px;
+	font-size: 25px;
+	padding: 25px;	
 }
 
 .img3{
 	flex-basis: 40%;
-	  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
+	display: block;
+  	margin-left: auto;
+  	margin-right: auto;
+  	width: 50%;
 }
 
 /*Section 4*/
@@ -96,7 +92,7 @@
 }
 
 .txt3{
-	font-size: 25px;
+	font-size: 35px;
      padding-left: 20px;
 	text-align: center
 }

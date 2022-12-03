@@ -57,28 +57,27 @@
   font-size: 20px;
 }
 
-/* The "Sign Up" button */
-.button {
-  background-color: #04AA6D;
-  border: none;
-  color: white;
-  padding: 10px 25px;
-  text-align: center;
-  text-decoration: none;
-  font-size: 18px;
-}
+
 /*header h1*/
 .header{
 	text-align: center;
-	
-
-	
 }
+
+#inspo{
+	text-decoration: underline;
+}
+
 
 /* Change the width of the three columns to 100%
 (to stack horizontally on small screens) */
 @media only screen and (max-width: 600px) {
-  .columns {
-    width: 100%;
-  }
+	.columns {
+	width: 100%;
+	}
+	#inspo{
+		text-align: center;
+	}
+	#custom{
+		text-align: center;
+	}
 }

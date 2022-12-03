@@ -110,8 +110,31 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		}
 	}
 	}
+	
+	if(isset($_POST['updatepassword']))
+    {    
 
+        $ide = $_POST['update_password'];
+        $password = $_POST['pword'];
+		$pass = password_hash($password, PASSWORD_DEFAULT);
 
+        $sql = "UPDATE users SET password='$pass' WHERE username='$ide'";
+        $query_run = mysqli_query($link, $sql);
+
+        if($query_run)
+        {
+            echo '<script> alert("Income Updated"); </script>';
+            header("Location:index.php");
+        }
+        else
+        {
+            echo '<script> alert("Data Not Updated"); </script>';
+        }
+    }
+
+	if(isset($_POST["delete"])){
+		$ide = $_POST['delete_id'];
+	}
 ?>
  
 <!DOCTYPE html>
@@ -205,16 +228,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             });
         });
 		
-		
-			$(document).ready(function () {
-
-				$('.inpectbtn3').on('click', function () {
-
-				$('#inspectbtn3').modal('show');
-
-			});
-			}); 
-		
 			$(document).ready(function () {
 
             $('.editbtn3').on('click', function () {
@@ -251,6 +264,53 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
             });
         });
+		
+		
+			$(document).ready(function () {
+
+            $('.editbtn4').on('click', function () {
+
+                $('#editbudget4').modal('show');
+
+                $tr = $(this).closest('tr');
+
+                var data = $tr.children("td").map(function () {
+                    return $(this).text();
+                }).get();
+
+                console.log(data);
+				$('#update_password').val(data[0]);
+                $('#pword').val(data[1]);
+            });
+        }); 
+		
+				$(document).ready(function () {
+
+				$('.delete').on('click', function () {
+
+				$('#delete').modal('show');
+
+			});
+			}); 
+		
+			$(document).ready(function () {
+
+            $('.deletebtn4').on('click', function () {
+
+                $('#deletemodall').modal('show');
+
+                $tr = $(this).closest('tr');
+
+                var data = $tr.children("td").map(function () {
+                    return $(this).text();
+                }).get();
+
+                console.log(data);
+
+                $('#delete_id').val(data[0]);
+
+            });
+        });
 	</script>
 </head>
 <body>
@@ -259,8 +319,153 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		<a href="index.php" class="btn btn-primary ml-3">Sign Out of Your Account</a>
     </p>
 	<h1 class="text-center">Admin View</h1>
+
 	<div class="card">
 		<div class="card-body">
+			<div class="d-grid gap-2 d-md-flex justify-content-md-center">
+				<button align="center" type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete">Delete User</button>
+			</div><br>
+			
+		<!--Modal for User Delete inspect-->						
+	<div class ="modal fade" id="delete" tabindex="-1" role="dialog" arialabelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">All Users</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+					<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+						<div class="modal-body">
+										<? 	$username = $_SESSION["username"];
+											$sql= "SELECT * FROM users";
+											$query_run = mysqli_query($link, $sql);
+										?>
+												<table id="table" class="table table-dark">
+													<thead>
+														<tr>
+															<th scope="col">ID</th>
+															<th scope="col">Username</th>
+															<th scope="col">Delete</th>
+														</tr>
+													</thead>
+										<?php
+											if($query_run){
+											foreach($query_run as $row){
+										?>
+													<tbody>
+														<tr>
+															<td><?php echo $row['id']; ?></td>
+															<td><?php echo $row['username']; ?></td>
+															<td>
+																<button type="button" class="btn btn-danger deletebtn4"> Delete </button>
+															</td>
+														</tr>
+														</tbody>
+										<?php
+											}
+											} else{
+											echo "No Record Found";
+											}
+										?>
+							</table>
+										<? 	$username = $_SESSION["username"];
+											$sql= "SELECT * FROM list";
+											$query_run = mysqli_query($link, $sql);
+										?>
+												<table id="table" class="table table-dark">
+													<thead>
+														<tr>
+															<th scope="col">ID</th>
+															<th scope="col">Username</th>
+															<th scope="col">Item</th>
+														</tr>
+													</thead>
+										<?php
+											if($query_run){
+											foreach($query_run as $row){
+										?>
+													<tbody>
+														<tr>
+															<td><?php echo $row['id']; ?></td>
+															<td><?php echo $row['username']; ?></td>
+															<td><?php echo $row['buy']; ?></td>
+														</tr>
+														</tbody>
+										<?php
+											}
+											} else{
+											echo "No Record Found";
+											}
+										?>
+							</table>
+										<? 	$username = $_SESSION["username"];
+											$sql= "SELECT * FROM income";
+											$query_run = mysqli_query($link, $sql);
+										?>
+												<table id="table" class="table table-dark">
+													<thead>
+														<tr>
+															<th scope="col">ID</th>
+															<th scope="col">Username</th>
+															<th scope="col">Income</th>
+														</tr>
+													</thead>
+										<?php
+											if($query_run){
+											foreach($query_run as $row){
+										?>
+													<tbody>
+														<tr>
+															<td><?php echo $row['id']; ?></td>
+															<td><?php echo $row['username']; ?></td>
+															<td><?php echo $row['income']; ?></td>
+														</tr>
+														</tbody>
+										<?php
+											}
+											} else{
+											echo "No Record Found";
+											}
+										?>
+							</table>
+							</div>
+							<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!--Modal for User Delete-->
+    <div class="modal fade" id="deletemodall" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Delete User </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+
+                    <div class="modal-body">
+
+                        <input type="hidden" name="delete_id" id="delete_id">
+
+                        <h4> Are you sure you want to delete this user?</h4>
+                    </div><br><br><br><br><br><br><br><br>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"> NO </button>
+                        <button type="submit" name="delete" class="btn btn-primary"> Yes </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+			
 			<h3>Users <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inspectbtn">Inspect</button></h3>
 			<? 	$username = $_SESSION["username"];
 				$sql= "SELECT * FROM users";
@@ -390,6 +595,68 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 			</div>
 		</div>
 		
+			<h3>User Password</h3>
+			<? 	$username = $_SESSION["username"];
+				$sql= "SELECT * FROM users";
+				$query_run = mysqli_query($link, $sql);
+			?>
+					<table id="table" class="table table-dark">
+						<thead>
+							<tr>
+								<th scope="col">Username</th>
+								<th scope="col">Password</th>
+								<th scope="col">Edit</th>
+							</tr>
+						</thead>
+			<?php
+				if($query_run){
+				foreach($query_run as $row){
+			?>
+						<tbody>
+							<tr>
+								<td><?php echo $row['username']; ?></td>
+								<td><?php echo $row['password']; ?></td>
+								<td>
+								<button type="button" class="btn btn-warning editbtn4"> EDIT </button>
+								</td>
+							</tr>
+							</tbody>
+			<?php
+				}
+				} else{
+				echo "No Record Found";
+				}
+			?>
+</table>
+					
+	<!--Modal for User Password Edit-->						
+	<div class ="modal fade" id="editbudget4" tabindex="-1" role="dialog" arialabelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Edit User Entry</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+					<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+						<div class="modal-body">
+							<input type="hidden" name='update_password' id="update_password">
+							<div class="form-group">
+							<label for="exampleInputbuy">User Password</label>
+							<input type="text" class="form-control" name="pword" id="pword" placeholder="Enter Password">
+							</div>
+							<div class="form-group">
+							<br><br><br><br><br><br><br><br>
+							</div>
+							<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="submit" name="updatepassword" class="btn btn-success">Update</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		</div>
+			
 			<h3>Budget Data <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inspectbtn2">Inspect</button></h3>
 			<? 	$username = $_SESSION["username"];
 				$sql= "SELECT * FROM list";
@@ -552,7 +819,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>
         </div>
     </div>
-			<h3>Income <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inspectbtn3">Inspect</button></h3>
+			<h3>Income</h3>
 			<? 	$username = $_SESSION["username"];
 				$sql= "SELECT * FROM income";
 				$query_run = mysqli_query($link, $sql);
@@ -590,60 +857,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 			?>
 </table>
 			
-	<!--Modal for Income Inspect-->						
-	<div class ="modal fade" id="inspectbtn3" tabindex="-1" role="dialog" arialabelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">All Users</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				</div>
-					<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-						<div class="modal-body">
-							<? 	$username = $_SESSION["username"];
-								$sql= "SELECT * FROM income";
-								$query_run = mysqli_query($link, $sql);
-							?>
-									<table id="table" class="table table-dark">
-										<thead>
-											<tr>
-												<th scope="col">Username</th>
-												<th scope="col">Income</th>
-												<th scope="col">Edit</th>
-												<th scope="col">Delete</th>
-											</tr>
-										</thead>
-							<?php
-								if($query_run){
-								foreach($query_run as $row){
-							?>
-										<tbody>
-											<tr>
-												<td><?php echo $row['username']; ?></td>
-												<td><?php echo $row['income']; ?></td>
-												<td>
-												<button type="button" class="btn btn-warning editbtn3"> EDIT </button>
-												</td>
-												<td>
-												<button type="button" class="btn btn-danger deletebtn3"> DELETE </button>
-												</td>
-											</tr>
-											</tbody>
-							<?php
-								}
-								} else{
-								echo "No Record Found";
-								}
-							?>
-				</table>
-							</div>
-							<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
 	<!--Modal for Income Edit-->						
 	<div class ="modal fade" id="editbudget3" tabindex="-1" role="dialog" arialabelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
@@ -699,7 +912,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>
         </div>
     </div>
-		</div>
 	</div>
 </body>
 </html>

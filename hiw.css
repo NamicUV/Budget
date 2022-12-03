@@ -42,7 +42,7 @@ body{
 }
 
 .steps{
-	border: thin;
+	border: solid;
 	border-radius: 25px;
 	background-color: white;
 	padding-top: 10px;
@@ -82,3 +82,25 @@ body{
 	margin-right: auto;
 }
 
+.text{
+	text-align: center;
+	font-size: 50px;
+	text-decoration: underline;
+}
+
+@media only screen and (max-width: 600px) {
+  .text{
+    text-align: center;
+	text-decoration: underline;
+	font-size: 30px;
+  }
+}
+
+.img4{
+	flex-basis: 40%;
+	display: block;
+ 	margin-left: auto;
+  	margin-right: auto;
+  	width: 195px;
+	height: auto;
+}

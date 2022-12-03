@@ -2,13 +2,13 @@
 // Initialize the session
 session_start();
  
-// Check if the user is already logged in, if yes then redirect him to welcome page
+// Check if the user or admin is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["logged"]) && $_SESSION["logged"] === true){
-	header("location: index2.php");
-	exit;
+	header("Location:index2.php");
+	
 }elseif(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-	header("location: index.php");
-	exit;
+	header("Location:index.php");
+	
 }
 
 // Include config file
@@ -20,7 +20,7 @@ $username_err = $password_err = $login_err = "";
  
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
- 
+	
     // Check if username is empty
     if(empty(trim($_POST["username"]))){
         $username_err = "Please enter username.";
@@ -57,15 +57,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     // Bind result variables
                     mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password, $needs, $savings, $wants);
                     if(mysqli_stmt_fetch($stmt)){
-                        if(password_verify($password, $hashed_password)&& $username!=="admin"){
-                            // Password is correct so start a new sesstion
-							session_start();
-
+						//Verifies account based on password and only executes if the username does not equal admin
+                        if(password_verify($password, $hashed_password) && $username !== "admin"){
+                            session_start();
+							// Password is correct so start a new sesstion
 							$_SESSION["logged"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;
+							
  							// Redirect user to welcome page
-                        	header("location:index2.php");
+							header("Location:index2.php");
+		
+							//Verifies account based on password and only executes if the username does equals admin
 						   } elseif(password_verify($password, $hashed_password)&& $username=="admin"){
 							                            // Password is correct so start a new sesstion
 							session_start();
@@ -75,7 +78,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $_SESSION["username"] = $username;
  							// Redirect user to welcome page
                         	header("location:index.php");
-							
+						
 							} else{
                             // Password is not valid, display a generic error message
                             $login_err = "Invalid username or password.";
@@ -131,8 +134,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <span class="invalid-feedback"><?php echo $password_err; ?></span>
             </div>
             <div id="form-group">
-<!--				This is where the refresh button is-->
-                <input  type="submit" id="button" class="btn btn-primary" value="Login">
+                <button class="btn btn-primary" name="but"><input  type="submit" name="button" class="btn btn-primary" value="Login"></button>
             </div>
 			
 			<br>

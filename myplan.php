@@ -158,10 +158,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	<div type="hidden">
 	.</div>
 	<h2 class="header">If you would like to do your own custom budget please click the "Custom" button below</h2><br>
+	
+	<!-- This is a button to show popup modal for custom budget-->
 	<div class="d-grid gap-2 d-md-flex justify-content-md-center">
-	<button type="button"  class="btn btn-success" data-toggle="modal" data-target="#editplan" name="editplan" >
+	<button type="button" id="custom" class="btn btn-success" data-toggle="modal" data-target="#editplan" name="editplan" >
 		Custom</button>
 	</div><br><br>
+	
+	<h1 class="d-grid gap-2 d-md-flex justify-content-md-center" id="inspo">If You're Saving You're Succeeding!</h1><br>
+	
 	<!--Modal for Update Plan-->						
 	<div class ="modal fade" id="editplan" tabindex="-1" role="dialog" arialabelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
