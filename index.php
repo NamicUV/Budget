@@ -1,4 +1,6 @@
 <?php
+//*Credentials for Admin Account: Username=admin Password=adminpass*
+
 // Initialize the session
 session_start();
  
@@ -91,12 +93,48 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         }
     }
 	
-		if(isset($_POST['deleteincome']))
+		if(isset($_POST['delete3']))
 	{
 		$ide = $_POST['delete_income'];
 		
 
-		$sql = "DELETE FROM income WHERE id='$ide'";
+		$sql = "DELETE FROM income WHERE username='$ide'";
+		$query_run = mysqli_query($link, $sql);
+
+		if($query_run)
+		{
+			echo '<script> alert("Data Deleted"); </script>';
+			header("Location:index.php");
+		}
+		else
+		{
+			echo '<script> alert("Data Not Deleted"); </script>';
+		}
+	}
+		if(isset($_POST['updatepassword']))
+    {    
+
+        $ide = $_POST['update_password'];
+        $password = $_POST['pword'];
+		$pass = password_hash($password, PASSWORD_DEFAULT);
+
+        $sql = "UPDATE users SET password='$pass' WHERE username='$ide'";
+        $query_run = mysqli_query($link, $sql);
+
+        if($query_run)
+        {
+            echo '<script> alert("Password Updated"); </script>';
+            header("Location:index.php");
+        }
+        else
+        {
+            echo '<script> alert("Data Not Updated"); </script>';
+        }
+    }
+
+	if(isset($_POST["delete"])){
+		$ide = $_POST['delete_idd'];
+		$sql = "DELETE FROM users WHERE id='$ide'";
 		$query_run = mysqli_query($link, $sql);
 
 		if($query_run)
@@ -111,30 +149,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	}
 	}
 	
-	if(isset($_POST['updatepassword']))
-    {    
-
-        $ide = $_POST['update_password'];
-        $password = $_POST['pword'];
-		$pass = password_hash($password, PASSWORD_DEFAULT);
-
-        $sql = "UPDATE users SET password='$pass' WHERE username='$ide'";
-        $query_run = mysqli_query($link, $sql);
-
-        if($query_run)
-        {
-            echo '<script> alert("Income Updated"); </script>';
-            header("Location:index.php");
-        }
-        else
-        {
-            echo '<script> alert("Data Not Updated"); </script>';
-        }
-    }
-
-	if(isset($_POST["delete"])){
-		$ide = $_POST['delete_id'];
-	}
 ?>
  
 <!DOCTYPE html>
@@ -248,9 +262,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		
 		    $(document).ready(function () {
 
-            $('.deletebtn3').on('click', function () {
+            $('.delete3').on('click', function () {
 
-                $('#deletemodal3').modal('show');
+                $('#delete3').modal('show');
 
                 $tr = $(this).closest('tr');
 
@@ -293,30 +307,30 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 			});
 			}); 
 		
-			$(document).ready(function () {
+		
+				$(document).ready(function () {
 
-            $('.deletebtn4').on('click', function () {
+				$('.deletebtn4').on('click', function () {
 
-                $('#deletemodall').modal('show');
-
-                $tr = $(this).closest('tr');
+				$('#deletemodall').modal('show');
+					
+				$tr = $(this).closest('tr');
 
                 var data = $tr.children("td").map(function () {
                     return $(this).text();
                 }).get();
+				
+				console.log(data);
+				$('#delete_idd').val(data[0]);
 
-                console.log(data);
-
-                $('#delete_id').val(data[0]);
-
-            });
-        });
+			});
+			}); 
 	</script>
 </head>
 <body>
 	<p class="logout">
         <a href="logout.php" class="btn btn-danger ml-3">Sign Out of Your Account</a>
-		<a href="index.php" class="btn btn-primary ml-3">Sign Out of Your Account</a>
+		<!--<a href="index.php" class="btn btn-primary ml-3">Refresh</a>-->
     </p>
 	<h1 class="text-center">Admin View</h1>
 
@@ -368,66 +382,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 											}
 										?>
 							</table>
-										<? 	$username = $_SESSION["username"];
-											$sql= "SELECT * FROM list";
-											$query_run = mysqli_query($link, $sql);
-										?>
-												<table id="table" class="table table-dark">
-													<thead>
-														<tr>
-															<th scope="col">ID</th>
-															<th scope="col">Username</th>
-															<th scope="col">Item</th>
-														</tr>
-													</thead>
-										<?php
-											if($query_run){
-											foreach($query_run as $row){
-										?>
-													<tbody>
-														<tr>
-															<td><?php echo $row['id']; ?></td>
-															<td><?php echo $row['username']; ?></td>
-															<td><?php echo $row['buy']; ?></td>
-														</tr>
-														</tbody>
-										<?php
-											}
-											} else{
-											echo "No Record Found";
-											}
-										?>
-							</table>
-										<? 	$username = $_SESSION["username"];
-											$sql= "SELECT * FROM income";
-											$query_run = mysqli_query($link, $sql);
-										?>
-												<table id="table" class="table table-dark">
-													<thead>
-														<tr>
-															<th scope="col">ID</th>
-															<th scope="col">Username</th>
-															<th scope="col">Income</th>
-														</tr>
-													</thead>
-										<?php
-											if($query_run){
-											foreach($query_run as $row){
-										?>
-													<tbody>
-														<tr>
-															<td><?php echo $row['id']; ?></td>
-															<td><?php echo $row['username']; ?></td>
-															<td><?php echo $row['income']; ?></td>
-														</tr>
-														</tbody>
-										<?php
-											}
-											} else{
-											echo "No Record Found";
-											}
-										?>
-							</table>
 							</div>
 							<div class="modal-footer">
 							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -452,10 +406,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
                     <div class="modal-body">
 
-                        <input type="hidden" name="delete_id" id="delete_id">
+                        <input type="hidden" name="delete_idd" id="delete_idd">
 
                         <h4> Are you sure you want to delete this user?</h4>
-                    </div><br><br><br><br><br><br><br><br>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"> NO </button>
                         <button type="submit" name="delete" class="btn btn-primary"> Yes </button>
@@ -845,7 +799,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 								<button type="button" class="btn btn-warning editbtn3"> EDIT </button>
 								</td>
 								<td>
-								<button type="button" class="btn btn-danger deletebtn3"> DELETE </button>
+								<button type="button" class="btn btn-danger delete3"> DELETE </button>
 								</td>
 							</tr>
 							</tbody>
@@ -883,9 +837,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 				</div>
 			</div>
 		</div>
+			</div>
 			
 			<!--Modal for User Income Delete-->
-    <div class="modal fade" id="deletemodal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="delete3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -900,18 +855,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
                     <div class="modal-body">
 
-                        <input  name="delete_income" id="delete_income">
+                        <input type="hidden" name="delete_income" id="delete_income">
 
                         <h4> Are you sure you want to delete this data?</h4>
+                    </div><br><br><br><br>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"> NO </button>
-                        <button type="submit" name="deleteincome" class="btn btn-primary"> Yes </button>
+                        <button type="submit" name="delete3" class="btn btn-primary"> Yes </button>
                     </div>
                 </form>
 
             </div>
         </div>
     </div>
-	</div>
 </body>
 </html>

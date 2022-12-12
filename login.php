@@ -1,14 +1,17 @@
 <?php
+//*Credentials for Admin Account: Username=admin Password=adminpass*
+
 // Initialize the session
 session_start();
  
 // Check if the user or admin is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["logged"]) && $_SESSION["logged"] === true){
-	header("Location:index2.php");
+	echo '<script>window.location.href = "index2.php";</script>';
+	exit;
 	
 }elseif(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-	header("Location:index.php");
-	
+	echo '<script>window.location.href = "index.php";</script>';
+	exit;
 }
 
 // Include config file
@@ -59,15 +62,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     if(mysqli_stmt_fetch($stmt)){
 						//Verifies account based on password and only executes if the username does not equal admin
                         if(password_verify($password, $hashed_password) && $username !== "admin"){
-                            session_start();
+                            
+							session_start();
 							// Password is correct so start a new sesstion
 							$_SESSION["logged"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;
 							
  							// Redirect user to welcome page
-							header("Location:index2.php");
-		
+							 echo '<script>window.location.href = "index2.php";</script>';
+	
 							//Verifies account based on password and only executes if the username does equals admin
 						   } elseif(password_verify($password, $hashed_password)&& $username=="admin"){
 							                            // Password is correct so start a new sesstion
@@ -77,8 +81,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;
  							// Redirect user to welcome page
-                        	header("location:index.php");
-						
+                        	 echo '<script>window.location.href = "index.php";</script>';
+							
 							} else{
                             // Password is not valid, display a generic error message
                             $login_err = "Invalid username or password.";
@@ -100,6 +104,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
     // Close connection
     mysqli_close($link);
+	
 }
 ?>
  
@@ -134,7 +139,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <span class="invalid-feedback"><?php echo $password_err; ?></span>
             </div>
             <div id="form-group">
-                <button class="btn btn-primary" name="but"><input  type="submit" name="button" class="btn btn-primary" value="Login"></button>
+                <input  type="submit" name="button" class="btn btn-primary" value="Login">
             </div>
 			
 			<br>

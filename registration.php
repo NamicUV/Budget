@@ -3,8 +3,8 @@
 require_once "server.php";
  
 // Define variables and initialize with empty values
-$username = $password = $confirm_password = $plan = "";
-$username_err = $password_err = $confirm_password_err = $plan_err = "";
+$username = $password = $confirm_password = $plan = $needs = $savings = $wants = "";
+$username_err = $password_err = $confirm_password_err = $plan_err = $needs_err = $savings_err = $wants_err = "";
  
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -64,32 +64,65 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 	
    	// Validate plan 
-   	if($_POST['flexRadioDefault'] == -1)
-    	$plan_err = "Please Select a Plan";
-      else {
-     	$plan = trim($_POST["plan"]);
-  	}
-
+   	if(empty(trim($_POST["needs"]))){
+		$needs_err = "Please enter a number";
+	} elseif(!preg_match('/^[0-9_]+$/', trim($_POST["needs"]))){
+		$needs_err = "Needs can only contain numbers";
+	} else{
+		$needs = trim($_POST["needs"]);
+	}
+	
+	if(empty(trim($_POST["savings"]))){
+		$savings_err = "Please enter a number";
+	} elseif(!preg_match('/^[0-9_]+$/', trim($_POST["savings"]))){
+		$savings_err = "Savings can only contain numbers";
+	} else{
+		$savings = trim($_POST["savings"]);
+	}
+	
+	if(empty(trim($_POST["wants"]))){
+		$wants_err = "Please enter a number";
+	} elseif(!preg_match('/^[0-9_]+$/', trim($_POST["wants"]))){
+		$wants_err = "wants can only contain numbers";
+	} else{
+		$wants = trim($_POST["wants"]);
+	}
+	
+	if($needs + $savings + $wants > 100){
+		$needs_err= "Total Exceeds 100%";
+		$savings_err= "Total Exceeds 100%";
+		$wants_err= "Total Exceeds 100%";
+	}
+	
+	if($needs + $savings + $wants < 100){
+		$needs_err= "Total falls below 100%";
+		$savings_err= "Total falls below 100%";
+		$wants_err= "Total falls below 100%";
+	}	
+	
 	
     // Check input errors before inserting in database
-    if(empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($plan_err)){
+    if(empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($needs_err) && empty($savings_err) && empty($wants_err)){
         
         // Prepare an insert statement
-        $sql = "INSERT INTO users (username, password, plan) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO users (username, password, needs, savings, wants) VALUES (?, ?, ?, ?, ?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sss", $param_username, $param_password, $param_plan);
+            mysqli_stmt_bind_param($stmt, "sssss", $param_username, $param_password, $param_needs, $param_savings, $param_wants);
             
             // Set parameters
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
-			$param_plan = $plan;
+			$param_needs = $needs;
+			$param_savings = $savings;
+			$param_wants = $wants;
             
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
                 // Redirect to login page
-                header("Location: login.php");
+				echo '<script> alert("Registration Complete"); </script>';
+                echo '<script>window.location.href = "login.php";</script>';
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
             }
@@ -133,41 +166,23 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
             </div>
 				<p>Choose Your Plan:</p>
-				<p>(Note*: Here you will insert what percent of your income will go into the categories listed below)</p>
+				<p>(Note*: Here you will insert what percent of your income will go into the categories listed below.)</p>
 			<div class="form-group">
-                <label>Needs</label>
+                <label>Needs%</label>
                 <input type="text" name="needs" class="form-control <?php echo (!empty($needs_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $needs; ?>">
                 <span class="invalid-feedback"><?php echo $needs_err; ?></span>
             </div>
 			<div class="form-group">
-                <label>Savings</label>
-                <input type="text" name="savings" class="form-control <?php echo (!empty($savings_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $savings; ?>">%
+                <label>Savings%</label>
+                <input type="text" name="savings" class="form-control <?php echo (!empty($savings_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $savings; ?>">
                 <span class="invalid-feedback"><?php echo $savings_err; ?></span>
             </div>
 		    <div class="form-group">
-                <label>Wants</label>
+                <label>Wants%</label>
                 <input type="text" name="wants" class="form-control <?php echo (!empty($wants_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $wants; ?>">
                 <span class="invalid-feedback"><?php echo $wants_err; ?></span>
             </div>	
-				<!--<p class="note">(Note*: the order from left to right is Needs-Savings-Wants)</p>   
-			<div class="form-check">
-  				<input class="form-check-input <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" type="radio" name="plan" id="flexRadioDefault1" checked value="-1">
-  				<label class="form-check-label" for="flexRadioDefault1">Select a Plan</label>
-			</div>
-			<div class="form-group">
-			<div class="form-check">
-  				<input class="form-check-input" type="radio" name="plan" id="flexRadioDefault2" value="1">
-  				<label class="form-check-label" for="flexRadioDefault2">50%-20%-30%</label>
-			</div>
-			<div class="form-check">
-  				<input class="form-check-input" type="radio" name="plan" id="flexRadioDefault2" value="2">
-  				<label class="form-check-label" for="flexRadioDefault2">50%-40%-10%</label>
-			</div>
-			<div class="form-check">
-  				<input class="form-check-input" type="radio" name="plan" id="flexRadioDefault2" value="3">
-  				<label class="form-check-label" for="flexRadioDefault2">70%-20%-10%</label>
-			</div>
-			</div>-->	
+
 			<div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Submit">
                 <input type="reset" class="btn btn-secondary ml-2" value="Reset">

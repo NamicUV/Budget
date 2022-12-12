@@ -1,10 +1,12 @@
 <?php
+//*Credentials for Admin Account: Username=admin Password=adminpass*
+
 // Initialize the session
 session_start();
  
 // Check if the user is logged in, otherwise redirect to login page
 if(!isset($_SESSION["logged"]) || $_SESSION["logged"] !== true){
-    header("location: login.php");
+    echo '<script>window.location.href = "login.php";</script>';
     exit;
 }
 
@@ -55,8 +57,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             if(mysqli_stmt_execute($stmt)){
                 // Password updated successfully. Destroy the session, and redirect to login page
                 session_destroy();
-                header("location:login.php");
-                exit();
+                echo '<script>window.location.href = "login.php";</script>';
+               
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
             }
