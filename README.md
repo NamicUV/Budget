@@ -69,4 +69,4 @@ Next, make sure you are using a coding application that allows the use of HTML, 
 
 *Please Note*: If you are using a service provider for your domain and database you will need to use the index.html file do establish the homepage of your domain. If you are using a local host then the index.html will not be used.
 
-If you have your own domain just enter the website domain into your browser url to see the project but if you are using a local host you will need to enter the local host url into your browser url to see the project. To have access to the admin page you must register an account with a username "admin".
+If you have your own domain just enter the website domain into your browser url to see the project but if you are using a local host you will need to enter the local host url into your browser url to see the project. To have access to the admin page you must register an account with a username "admin". On our website to access the admin page the credentials required are as follows: username=admin password=adminpass.
